@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Threading.Channels;
 
 namespace insuranceDeviceCalculater
 {
     internal class Program
-    {// could add all the global variables but for simplicity, keeping them in the main class
+    {//global variables
         static decimal topDevicePrice = 0;
         static string topDeviceName = "";
         static decimal totalInsuranceCost = 0;
@@ -11,6 +12,7 @@ namespace insuranceDeviceCalculater
         static int laptopCount = 0;
         static int desktopCount = 0;
         static int otherCount = 0;
+        static List<string> deviceNames = new List<string>();
         static void Main(string[] args)
         {
             introScreen();
@@ -36,12 +38,14 @@ namespace insuranceDeviceCalculater
             {
                 Console.WriteLine("\nEnter device name:");
                 name = Console.ReadLine();
-
+                
                 if (!string.IsNullOrWhiteSpace(name))
                     break;
 
                 Console.WriteLine("Invalid input. Device name cannot be empty.");
             }
+            // adds the device name to a list of device names
+            deviceNames.Add(name);
 
             int number;
             Console.WriteLine("\nEnter number of devices:");
@@ -74,6 +78,7 @@ namespace insuranceDeviceCalculater
                 otherCount += number;
             decimal value = cost;
             string depreciationTable = "\nMonth\tValue";
+
 
             for (int i = 1; i <= 6; i++)
             {
@@ -110,7 +115,7 @@ namespace insuranceDeviceCalculater
             Console.WriteLine(depreciationTable);
             Console.WriteLine($"\nDepreciated value per device: {depreciatedCost:C}");
             Console.WriteLine($"Insurance for this entry: {insuranceAmount:C}");
-            Console.WriteLine($"Running total insurance: {totalInsuranceCost:C}");
+            Console.WriteLine($"\n\nRunning total insurance: {totalInsuranceCost:C}");
         }
 
         
@@ -125,9 +130,20 @@ namespace insuranceDeviceCalculater
         {
             Console.WriteLine($"\nMost expensive device: {topDeviceName} ({topDevicePrice:C})");
             Console.WriteLine($"Total insurance cost: {totalInsuranceCost:C}");
-            Console.WriteLine($"The number of laptops: {laptopCount}");
-            Console.WriteLine($"The number of desktops: {desktopCount}");
-            Console.WriteLine($"The number of other devices: {otherCount}");
+            Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            Console.WriteLine($"\nTotal number of devices: {laptopCount + desktopCount + otherCount}");
+            Console.WriteLine($"\nTotal number of laptops: {laptopCount}");
+            Console.WriteLine($"Total number of desktops: {desktopCount}");
+            Console.WriteLine($"Total number of other devices: {otherCount}");
+            // all names of devices entered
+            Console.WriteLine("\nAll devices entered:");
+            // loops through the list of device names and prints them out
+            // love stack overflow 
+            foreach (string device in deviceNames)
+            {
+                Console.WriteLine("- " + device);
+            }
+
         }
     }
 }
